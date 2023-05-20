@@ -31,6 +31,10 @@ export const Section = styled.section`
   background: #fb6b6b;
   border: 1px solid #dbdbdb;
   margin: 0 auto;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Header = styled.header`

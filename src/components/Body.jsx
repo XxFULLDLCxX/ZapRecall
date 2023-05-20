@@ -5,7 +5,8 @@ import Count from "./Count";
 import flash from "../assets/logo.png";
 
 function Body() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState({});
+
   const cards = [
     { question: "O que é JSX?", answer: "Uma extensão da linguagem JavaScript" },
     { question: "O React é __", answer: "Uma biblioteca JavaScript para construção de interfaces" },
@@ -27,10 +28,10 @@ function Body() {
         <h1>ZapRecall</h1>
       </Header>
       <Main>
-        <Cards items={cards} />
+        <Cards items={cards} count={count} setCount={setCount} />
       </Main>
       <Footer>
-        <Count />
+        <Count items={cards} count={count} />
       </Footer>
     </Section>
   );
