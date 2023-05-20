@@ -1,10 +1,11 @@
 import { DivCount } from "../styles/Count";
 
-function Count({ items, completed_cards }) {
+function Count({ items, cards }) {
+  console.log(cards);
   return (
     <DivCount data-test="footer">
       <h3>
-        {completed_cards.length}/{items.length} CONCLUÍDOS
+        {Object.keys(cards).length - 1}/{items.length} CONCLUÍDOS
       </h3>
     </DivCount>
   );
