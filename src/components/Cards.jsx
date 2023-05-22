@@ -18,7 +18,6 @@ export default function Cards({ items, cards, setters }) {
 }
 
 function Card({ id, item, cards, setters }) {
-  const [state, setState] = useState("closed");
   const [card, setCard] = useState({ state: "closed" });
 
   const settings = {
@@ -55,20 +54,22 @@ function Card({ id, item, cards, setters }) {
       },
     },
   };
-  const alternate = { closed: "open", open: "flipped", flipped: "completed", completed: "completed" }[state];
-  const data = state in settings ? settings[state].data : {};
+  const alternate = { closed: "open", open: "flipped", flipped: "completed", completed: "completed" }[card.state];
+  const updateCard = () => setCard({ ...card, state: alternate });
+
+  const data = card.state in settings ? settings[card.state].data : {};
   const text = { closed: `Pergunta ${id}`, open: item.question, flipped: item.answer, completed: `Pergunta ${id}` };
 
   return (
-    <DivCard data-test="flashcard" state={state} $h2={data.h2}>
-      <h2 test="flashcard-text">{text[state]}</h2>
-      {state !== "flipped" && <Button $css={data.button} $data={data} onClick={() => setState(alternate)}></Button>}
-      {state === "flipped" && <Answer id={id} cards={cards} setters={{ ...setters, setState }} />}
+    <DivCard data-test="flashcard" state={card.state} $h2={data.h2}>
+      <h2 test="flashcard-text">{text[card.state]}</h2>
+      {card.state !== "flipped" && <Button $css={data.button} $data={data} onClick={updateCard}></Button>}
+      {card.state === "flipped" && <Answer id={id} card={card} cards={cards} setters={{ ...setters, setCard }} />}
     </DivCard>
   );
 }
 
-function Answer({ id, cards, setters }) {
+function Answer({ id, card, cards, setters }) {
   const data = (color) => {
     return css`
       width: 85.17px;
@@ -78,10 +79,13 @@ function Answer({ id, cards, setters }) {
   };
 
   const pressedAnswer = (key) => {
-    const new_cards = { ...cards };
-    setters.setCards(new_cards);
-    setters.setState("completed");
-    new_cards[id] = key;
+    console.log(card.state);
+    if (card.state !== "completed") {
+      const new_cards = { ...cards };
+      new_cards[id] = key;
+      setters.setCards(new_cards);
+      setters.setCard({ ...card, state: "completed" });
+    }
   };
 
   return (

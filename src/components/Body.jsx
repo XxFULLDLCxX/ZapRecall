@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Section, Header, Main, Footer } from "../styles";
+import { Section, Header, Main, Footer, Welcome, Button } from "../styles/Body";
 import Cards from "./Cards";
 import Count from "./Count";
 import flash from "../assets/logo.png";
 
 function Body() {
   const [completed_cards, setCards] = useState([{}]);
+  const [first, setFirst] = useState(true);
 
   const cards = [
     { question: "O que é JSX?", answer: "Uma extensão da linguagem JavaScript" },
@@ -21,19 +22,32 @@ function Body() {
     },
   ];
 
+  const header = (
+    <Header>
+      <img src={flash} alt="Logo de Raio" />
+      <h1>ZapRecall</h1>
+    </Header>
+  );
+
   return (
-    <Section>
-      <Header>
-        <img src={flash} alt="Logo de Raio" />
-        <h1>ZapRecall</h1>
-      </Header>
-      <Main>
-        <Cards items={cards} cards={completed_cards} setters={{ setCards }} />
-      </Main>
-      <Footer>
-        <Count items={cards} cards={completed_cards} />
-      </Footer>
-    </Section>
+    <>
+      {first ? (
+        <Welcome>
+          {header}
+          <Button onClick={() => setFirst(false)}>Iniciar Recall!</Button>
+        </Welcome>
+      ) : (
+        <Section>
+          {header}
+          <Main>
+            <Cards items={cards} cards={completed_cards} setters={{ setCards }} />
+          </Main>
+          <Footer>
+            <Count items={cards} cards={completed_cards} />
+          </Footer>
+        </Section>
+      )}
+    </>
   );
 }
 
