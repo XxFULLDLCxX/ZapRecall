@@ -19,10 +19,6 @@ export const DivCard = styled.div`
   padding: 15px;
   flex-wrap: wrap;
 
-  &:last-child {
-    margin-bottom: 120px;
-  }
-
   h2 {
     font-style: normal;
     color: #333333;
@@ -42,11 +38,14 @@ export const DivCard = styled.div`
   }
   &[state="open"] h2,
   &[state="flipped"] h2 {
+    width: 100%;
     height: max-content;
+    margin-bottom: 5px;
     font-size: 18px;
     font-weight: 400;
     line-height: 22px;
-    letter-spacing: 0em;
+    letter-spacing: -0.05em;
+    text-align: left;
   }
   div {
     ${center}

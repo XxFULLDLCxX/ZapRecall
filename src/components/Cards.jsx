@@ -7,18 +7,18 @@ import icon_error from "../assets/icone_erro.png";
 import icon_almost from "../assets/icone_quase.png";
 import icon_correct from "../assets/icone_certo.png";
 
-export default function Cards({ items, cards, setters }) {
+export default function Cards({ cards, completed_cards, setters }) {
   return (
     <DivCards>
-      {items.map((item, index) => (
-        <Card key={index} id={index + 1} item={item} cards={cards} setters={setters} />
+      {cards.map((card, index) => (
+        <Card key={index} id={index + 1} card={card} completed_cards={completed_cards} setters={setters} />
       ))}
     </DivCards>
   );
 }
 
-function Card({ id, item, cards, setters }) {
-  const [card, setCard] = useState({ state: "closed" });
+function Card({ id, card, completed_cards, setters }) {
+  const [state, setState] = useState("closed");
 
   const settings = {
     closed: {
@@ -45,31 +45,32 @@ function Card({ id, item, cards, setters }) {
       data: {
         h2: css`
           text-decoration-line: line-through;
-          color: ${{ x: "#FF3030", o: "#FF922E", v: "#2FBE34" }[cards[id]]};
+          color: ${{ x: "#FF3030", o: "#FF922E", v: "#2FBE34" }[completed_cards.mapping[id]]};
         `,
         button: css`
-          background-image: url(${{ x: icon_error, o: icon_almost, v: icon_correct }[cards[id]]});
+          background-image: url(${{ x: icon_error, o: icon_almost, v: icon_correct }[completed_cards.mapping[id]]});
         `,
-        "data-test": { x: "no-icon", o: "partial-icon", v: "zap-icon" }[cards[id]],
+        "data-test": { x: "no-icon", o: "partial-icon", v: "zap-icon" }[completed_cards.mapping[id]],
       },
     },
   };
-  const alternate = { closed: "open", open: "flipped", flipped: "completed", completed: "completed" }[card.state];
-  const updateCard = () => setCard({ ...card, state: alternate });
+  const alternate = { closed: "open", open: "flipped", flipped: "completed", completed: "completed" }[state];
 
-  const data = card.state in settings ? settings[card.state].data : {};
-  const text = { closed: `Pergunta ${id}`, open: item.question, flipped: item.answer, completed: `Pergunta ${id}` };
+  const data = state in settings ? settings[state].data : {};
+  const text = { closed: `Pergunta ${id}`, open: card.question, flipped: card.answer, completed: `Pergunta ${id}` };
 
   return (
-    <DivCard data-test="flashcard" state={card.state} $h2={data.h2}>
-      <h2 test="flashcard-text">{text[card.state]}</h2>
-      {card.state !== "flipped" && <Button $css={data.button} $data={data} onClick={updateCard}></Button>}
-      {card.state === "flipped" && <Answer id={id} card={card} cards={cards} setters={{ ...setters, setCard }} />}
+    <DivCard data-test="flashcard" state={state} $h2={data.h2}>
+      <h2 test="flashcard-text">{text[state]}</h2>
+      {state !== "flipped" && <Button $css={data.button} $data={data} onClick={() => setState(alternate)}></Button>}
+      {state === "flipped" && (
+        <Answer id={id} state={state} completed_cards={completed_cards} setters={{ ...setters, setState }} />
+      )}
     </DivCard>
   );
 }
 
-function Answer({ id, card, cards, setters }) {
+function Answer({ id, state, completed_cards, setters }) {
   const data = (color) => {
     return css`
       width: 85.17px;
@@ -79,12 +80,13 @@ function Answer({ id, card, cards, setters }) {
   };
 
   const pressedAnswer = (key) => {
-    console.log(card.state);
-    if (card.state !== "completed") {
-      const new_cards = { ...cards };
-      new_cards[id] = key;
-      setters.setCards(new_cards);
-      setters.setCard({ ...card, state: "completed" });
+    console.log(state);
+    if (state !== "completed") {
+      setters.setCompletedCards({
+        list: [...completed_cards.list, key],
+        mapping: { ...completed_cards.mapping, [id]: key },
+      });
+      setters.setState("completed");
     }
   };
 

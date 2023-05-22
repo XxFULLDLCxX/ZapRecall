@@ -78,4 +78,5 @@ export const Main = styled.main``;
 
 export const Footer = styled.footer`
   display: fixed;
+  margin-top: 225px;
 `;

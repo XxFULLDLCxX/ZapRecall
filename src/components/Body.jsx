@@ -5,7 +5,7 @@ import Count from "./Count";
 import flash from "../assets/logo.png";
 
 function Body() {
-  const [completed_cards, setCards] = useState([{}]);
+  const [completed_cards, setCompletedCards] = useState({ mapping: {}, list: [] });
   const [first, setFirst] = useState(true);
 
   const cards = [
@@ -34,16 +34,18 @@ function Body() {
       {first ? (
         <Welcome>
           {header}
-          <Button onClick={() => setFirst(false)}>Iniciar Recall!</Button>
+          <Button data-test="start-btn" onClick={() => setFirst(false)}>
+            Iniciar Recall!
+          </Button>
         </Welcome>
       ) : (
         <Section>
           {header}
           <Main>
-            <Cards items={cards} cards={completed_cards} setters={{ setCards }} />
+            <Cards cards={cards} completed_cards={completed_cards} setters={{ setCompletedCards }} />
           </Main>
           <Footer>
-            <Count items={cards} cards={completed_cards} />
+            <Count cards={cards} completed_cards={completed_cards} />
           </Footer>
         </Section>
       )}
