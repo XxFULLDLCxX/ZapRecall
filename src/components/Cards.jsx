@@ -61,7 +61,7 @@ function Card({ id, card, completed_cards, setters }) {
 
   return (
     <DivCard data-test="flashcard" state={state} $h2={data.h2}>
-      <h2 test="flashcard-text">{text[state]}</h2>
+      <h2 data-test="flashcard-text">{text[state]}</h2>
       {state !== "flipped" && <Button $css={data.button} $data={data} onClick={() => setState(alternate)}></Button>}
       {state === "flipped" && (
         <Answer id={id} state={state} completed_cards={completed_cards} setters={{ ...setters, setState }} />
