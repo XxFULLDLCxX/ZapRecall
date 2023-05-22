@@ -6,7 +6,6 @@ import emoji_sad from "../assets/sad.png";
 import emoji_party from "../assets/party.png";
 
 function Count({ cards, completed_cards }) {
-  console.log(cards, completed_cards);
   const icons_sequence = {
     x: { src: icon_error, alt: "errado", "data-test": "no-icon" },
     o: { src: icon_almost, alt: "quase", "data-test": "partial-icon" },

@@ -80,7 +80,6 @@ function Answer({ id, state, completed_cards, setters }) {
   };
 
   const pressedAnswer = (key) => {
-    console.log(state);
     if (state !== "completed") {
       setters.setCompletedCards({
         list: [...completed_cards.list, key],
